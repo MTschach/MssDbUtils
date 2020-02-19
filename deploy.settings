@@ -1,0 +1,6 @@
+version = 0.6.0
+groupId = Mss
+artifactId = MssDbUtils
+licenses = ['Apache 2'] // or something else 
+id = MssDbUtils
+gitUrl = https://github.com/mtschach/MssIntern
