@@ -30,19 +30,15 @@ buildscript {
 
 
 allprojects {
-	repositories {
-		jcenter()
-	}
+   repositories {
+      jcenter()
+      maven {
+         url "https://dl.bintray.com/mtschach/Mss"
+      }
+      mavenLocal()
+   }
 }
 
-
-// In this section you declare where to find the dependencies of your project
-repositories {
-   jcenter()
-	maven {
-		url "https://dl.bintray.com/mtschach/Mss"
-	}
-}
 
 dependencies {
    compile 'Mss:MssUtils:latest.release'
@@ -66,6 +62,10 @@ task fatJar(type: Jar) {
     with jar
 }
 
+
+task publishLocal {
+   dependsOn 'publishToMavenLocal'
+}
 
 
 apply from: 'deploy.gradle'
