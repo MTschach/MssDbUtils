@@ -58,7 +58,7 @@ public class MssSingleResult {
    }
 
 
-   public String getValue(int column, int row, String defaultValue, @SuppressWarnings("unused") String asStringValue) {
+   public String getValue(int column, int row, String defaultValue, String asStringValue) {
       if (column < 0 || column >= this.columnNames.getSize())
          return defaultValue;
 
@@ -84,7 +84,7 @@ public class MssSingleResult {
    }
 
 
-   public Integer getValue(int column, int row, Integer defaultValue, @SuppressWarnings("unused") Integer asIntegerValue) {
+   public Integer getValue(int column, int row, Integer defaultValue, Integer asIntegerValue) {
       String s = getValue(column, row, (String)null, (String)null);
       if (s == null)
          return defaultValue;
@@ -114,7 +114,7 @@ public class MssSingleResult {
    }
 
 
-   public BigInteger getValue(int column, int row, BigInteger defaultValue, @SuppressWarnings("unused") BigInteger asBigIntegerValue) {
+   public BigInteger getValue(int column, int row, BigInteger defaultValue, BigInteger asBigIntegerValue) {
       String s = getValue(column, row, (String)null, (String)null);
       if (s == null)
          return defaultValue;
@@ -144,7 +144,7 @@ public class MssSingleResult {
    }
 
 
-   public BigDecimal getValue(int column, int row, BigDecimal defaultValue, @SuppressWarnings("unused") BigDecimal asBigDecimalValue) {
+   public BigDecimal getValue(int column, int row, BigDecimal defaultValue, BigDecimal asBigDecimalValue) {
       String s = getValue(column, row, (String)null, (String)null);
       if (s == null)
          return defaultValue;
@@ -174,7 +174,7 @@ public class MssSingleResult {
    }
 
 
-   public java.util.Date getValue(int column, int row, java.util.Date defaultValue, @SuppressWarnings("unused") java.util.Date asDateValue) {
+   public java.util.Date getValue(int column, int row, java.util.Date defaultValue, java.util.Date asDateValue) {
       String s = getValue(column, row, (String)null, (String)null);
       if (s == null)
          return defaultValue;
@@ -204,13 +204,13 @@ public class MssSingleResult {
    }
 
 
-   public Double getValue(int column, int row, Double defaultValue, @SuppressWarnings("unused") Double asDoubleValue) {
+   public Double getValue(int column, int row, Double defaultValue, Double asDoubleValue) {
       String s = getValue(column, row, (String)null, (String)null);
       if (s == null)
          return defaultValue;
 
       try {
-         return new Double(s);
+         return Double.parseDouble(s);
       }
       catch (Exception e) {
          Tools.doNullLog(e);
@@ -234,13 +234,13 @@ public class MssSingleResult {
    }
 
 
-   public Float getValue(int column, int row, Float defaultValue, @SuppressWarnings("unused") Float asFloatValue) {
+   public Float getValue(int column, int row, Float defaultValue, Float asFloatValue) {
       String s = getValue(column, row, (String)null, (String)null);
       if (s == null)
          return defaultValue;
 
       try {
-         return new Float(s);
+         return Float.parseFloat(s);
       }
       catch (Exception e) {
          Tools.doNullLog(e);
@@ -264,7 +264,7 @@ public class MssSingleResult {
    }
 
 
-   public Boolean getValue(int column, int row, Boolean defaultValue, @SuppressWarnings("unused") Boolean asBooleanValue) {
+   public Boolean getValue(int column, int row, Boolean defaultValue, Boolean asBooleanValue) {
       String s = getValue(column, row, (String)null, (String)null);
       if (s == null)
          return defaultValue;

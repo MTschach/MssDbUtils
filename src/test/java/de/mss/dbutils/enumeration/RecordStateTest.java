@@ -43,7 +43,7 @@ public class RecordStateTest extends TestCase {
 
    private void checkUnknown(String s) {
       try {
-         RecordState r = RecordState.getByDbChar(s);
+         RecordState.getByDbChar(s);
          fail();
       }
       catch (MssException e) {

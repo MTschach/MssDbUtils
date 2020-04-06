@@ -19,9 +19,7 @@ import de.mss.utils.exception.MssException;
 
 public class MssConnectionTest extends DbBaseTest {
 
-   private static final String STR_TEST_DEFAULT = "testdefault";
    private static final String STR_CONNECTION   = "Connection";
-   private static final String STR_DEFAULT      = "default";
    private static final String STR_AFTER_CLOSE      = "after close";
    private static final String STR_BEFORE_RECONNECT = "before re-connect";
 
@@ -41,7 +39,6 @@ public class MssConnectionTest extends DbBaseTest {
    }
 
 
-   @SuppressWarnings("boxing")
    @Test
    public void testConnectAndClose() throws SQLException, MssException {
       List<MssDbServer> list = prepareServerList(1);
@@ -152,7 +149,6 @@ public class MssConnectionTest extends DbBaseTest {
    }
 
 
-   @SuppressWarnings("boxing")
    @Test
    public void testConnectAndCloseAlreadyClosed() throws MssException, SQLException {
       List<MssDbServer> list = prepareServerList(1);
@@ -181,7 +177,6 @@ public class MssConnectionTest extends DbBaseTest {
    }
 
 
-   @SuppressWarnings("boxing")
    @Test
    public void testCloseMultiple() throws MssException, SQLException {
       List<MssDbServer> list = prepareServerList(2);
@@ -211,7 +206,6 @@ public class MssConnectionTest extends DbBaseTest {
    }
 
 
-   @SuppressWarnings("boxing")
    @Test
    public void testCloseMultipleWithError() throws SQLException, MssException {
       List<MssDbServer> list = prepareServerList(2);
@@ -240,7 +234,6 @@ public class MssConnectionTest extends DbBaseTest {
    }
 
 
-   @SuppressWarnings("boxing")
    @Test
    public void testExecuteQueryOk() throws SQLException, MssException {
       List<MssDbServer> list = prepareServerList(1);
@@ -253,7 +246,6 @@ public class MssConnectionTest extends DbBaseTest {
       EasyMock.expect(metaMock.getColumnName(EasyMock.eq(3))).andReturn("Column3");
       EasyMock.expect(metaMock.getColumnName(EasyMock.eq(4))).andReturn("Col4");
 
-      @SuppressWarnings("resource")
       ResultSet resultMock = EasyMock.createMock(ResultSet.class);
       EasyMock.expect(resultMock.getMetaData()).andReturn(metaMock);
       EasyMock.expect(resultMock.next()).andReturn(Boolean.TRUE).times(2).andReturn(Boolean.FALSE);
@@ -265,7 +257,6 @@ public class MssConnectionTest extends DbBaseTest {
       resultMock.close();
       EasyMock.expectLastCall();
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.executeQuery()).andReturn(resultMock);
       EasyMock.expect(stmtMock.getMoreResults()).andReturn(Boolean.FALSE);
@@ -305,7 +296,6 @@ public class MssConnectionTest extends DbBaseTest {
       EasyMock.expect(metaMock.getColumnName(EasyMock.eq(3))).andReturn("Column3");
       EasyMock.expect(metaMock.getColumnName(EasyMock.eq(4))).andReturn("Col4");
 
-      @SuppressWarnings("resource")
       ResultSet resultMock = EasyMock.createMock(ResultSet.class);
       EasyMock.expect(resultMock.getMetaData()).andReturn(metaMock);
       EasyMock.expect(Boolean.valueOf(resultMock.next())).andReturn(Boolean.TRUE).times(2).andReturn(Boolean.FALSE);
@@ -317,7 +307,6 @@ public class MssConnectionTest extends DbBaseTest {
       resultMock.close();
       EasyMock.expectLastCall();
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.executeQuery()).andReturn(resultMock);
       EasyMock.expect(Boolean.valueOf(stmtMock.getMoreResults())).andReturn(Boolean.FALSE);
@@ -341,13 +330,11 @@ public class MssConnectionTest extends DbBaseTest {
    }
 
 
-   @SuppressWarnings("boxing")
    @Test
    public void testExecuteUpdateOk() throws SQLException, MssException {
       List<MssDbServer> list = prepareServerList(1);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.executeUpdate()).andReturn(1);
 
@@ -377,7 +364,6 @@ public class MssConnectionTest extends DbBaseTest {
       List<MssDbServer> list = prepareServerList(1);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.executeUpdate()).andReturn(1);
 
@@ -400,13 +386,11 @@ public class MssConnectionTest extends DbBaseTest {
    }
 
 
-   @SuppressWarnings("boxing")
    @Test
    public void testExecuteMultipleUpdateOk() throws SQLException, MssException {
       List<MssDbServer> list = prepareServerList(2);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.executeUpdate()).andReturn(1).times(2);
 
@@ -435,13 +419,11 @@ public class MssConnectionTest extends DbBaseTest {
    }
 
 
-   @SuppressWarnings("boxing")
    @Test
    public void testExecuteMultipleUpdateInconsistence() throws SQLException, MssException {
       List<MssDbServer> list = prepareServerList(2);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.executeUpdate()).andReturn(1).andReturn(2);
 
@@ -474,7 +456,6 @@ public class MssConnectionTest extends DbBaseTest {
       List<MssDbServer> list = prepareServerList(2);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.executeUpdate()).andReturn(1).andReturn(2);
 
@@ -517,7 +498,6 @@ public class MssConnectionTest extends DbBaseTest {
    }
 
 
-   @SuppressWarnings("boxing")
    @Test
    public void testGetConnectionBusy2Times() throws SQLException, MssException {
       List<MssDbServer> list = prepareServerList(1);
@@ -530,7 +510,6 @@ public class MssConnectionTest extends DbBaseTest {
       EasyMock.expect(metaMock.getColumnName(EasyMock.eq(3))).andReturn("Column3");
       EasyMock.expect(metaMock.getColumnName(EasyMock.eq(4))).andReturn("Col4");
 
-      @SuppressWarnings("resource")
       ResultSet resultMock = EasyMock.createMock(ResultSet.class);
       EasyMock.expect(resultMock.getMetaData()).andReturn(metaMock);
       EasyMock.expect(resultMock.next()).andReturn(Boolean.TRUE).times(2).andReturn(Boolean.FALSE);
@@ -542,7 +521,6 @@ public class MssConnectionTest extends DbBaseTest {
       resultMock.close();
       EasyMock.expectLastCall();
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.executeQuery()).andReturn(resultMock);
       EasyMock.expect(stmtMock.getMoreResults()).andReturn(Boolean.FALSE);
@@ -562,7 +540,7 @@ public class MssConnectionTest extends DbBaseTest {
          res = con.executeQuery(loggingId, "select * from table1");
          assertNotNull("Result not null", res);
       }
-      catch (@SuppressWarnings("unused") MssException e) {
+      catch (MssException e) {
          fail();
       }
    }
@@ -614,7 +592,6 @@ public class MssConnectionTest extends DbBaseTest {
       List<MssDbServer> list = prepareServerList(1);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.getConnection()).andReturn(this.connectionMock);
 
@@ -647,7 +624,6 @@ public class MssConnectionTest extends DbBaseTest {
       List<MssDbServer> list = prepareServerList(1);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.getConnection()).andReturn(this.connectionMock);
 
@@ -680,7 +656,6 @@ public class MssConnectionTest extends DbBaseTest {
       List<MssDbServer> list = prepareServerList(1);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.getConnection()).andReturn(this.connectionMock);
 
@@ -713,7 +688,6 @@ public class MssConnectionTest extends DbBaseTest {
       List<MssDbServer> list = prepareServerList(1);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.getConnection()).andReturn(this.connectionMock);
 
@@ -746,7 +720,6 @@ public class MssConnectionTest extends DbBaseTest {
       List<MssDbServer> list = prepareServerList(1);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       PreparedStatement stmtMock = EasyMock.createMock(PreparedStatement.class);
       EasyMock.expect(stmtMock.getConnection()).andReturn(this.connectionMock);
 
@@ -779,7 +752,6 @@ public class MssConnectionTest extends DbBaseTest {
       List<MssDbServer> list = prepareServerList(1);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       CallableStatement stmtMock = EasyMock.createMock(CallableStatement.class);
       EasyMock.expect(stmtMock.getConnection()).andReturn(this.connectionMock);
 
@@ -811,7 +783,6 @@ public class MssConnectionTest extends DbBaseTest {
       List<MssDbServer> list = prepareServerList(1);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       CallableStatement stmtMock = EasyMock.createMock(CallableStatement.class);
       EasyMock.expect(stmtMock.getConnection()).andReturn(this.connectionMock);
 
@@ -843,7 +814,6 @@ public class MssConnectionTest extends DbBaseTest {
       List<MssDbServer> list = prepareServerList(1);
       String loggingId = Tools.getId(new Throwable());
 
-      @SuppressWarnings("resource")
       CallableStatement stmtMock = EasyMock.createMock(CallableStatement.class);
       EasyMock.expect(stmtMock.getConnection()).andReturn(this.connectionMock);
 
@@ -952,7 +922,6 @@ public class MssConnectionTest extends DbBaseTest {
       }
 
 
-      @SuppressWarnings("resource")
       private void init() throws MssException {
          this.connectionList = new ArrayList<>();
          for (MssDbServer s : this.serverlist) {

@@ -90,12 +90,12 @@ public class QueryParamTest extends TestCase {
             new int[] {java.sql.Types.DECIMAL, java.sql.Types.DOUBLE, java.sql.Types.FLOAT},
             "decimal");
       checkGetTypedValue(
-            new Double("12.34"),
+            Double.parseDouble("12.34"),
             "12.34",
             "",
             new int[] {java.sql.Types.DECIMAL, java.sql.Types.DOUBLE, java.sql.Types.FLOAT},
             "decimal");
-      checkGetTypedValue(new Float("12.34"), "12.34", "", new int[] {java.sql.Types.DECIMAL, java.sql.Types.DOUBLE, java.sql.Types.FLOAT}, "decimal");
+      checkGetTypedValue(Float.parseFloat("12.34"), "12.34", "", new int[] {java.sql.Types.DECIMAL, java.sql.Types.DOUBLE, java.sql.Types.FLOAT}, "decimal");
    }
 
 

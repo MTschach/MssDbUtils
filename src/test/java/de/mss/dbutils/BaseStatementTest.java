@@ -287,7 +287,7 @@ public class BaseStatementTest extends DbBaseTest {
 
 
    private Object[] getDefaultValues() {
-      return new Object[] {new Integer(1), new String("lala"), new BigDecimal("1.23")};
+      return new Object[] {Integer.valueOf(1), new String("lala"), new BigDecimal("1.23")};
    }
 
 

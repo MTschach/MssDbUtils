@@ -23,7 +23,7 @@ public class MssDbConnectionFactory {
          return MssDbConnectionFactory.connectionMap.get(server);
 
       try {
-         Class.forName(server.getDbDriver()).newInstance();
+         Class.forName(server.getDbDriver()).getDeclaredConstructor().newInstance();
       }
       catch (Exception e) {
          throw new MssException(e, "Driver '" + server.getDbDriver() + "' not found");

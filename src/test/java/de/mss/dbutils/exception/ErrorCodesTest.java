@@ -11,7 +11,7 @@ public class ErrorCodesTest extends TestCase {
    @Test
    public void testConstructor() {
       try {
-         ErrorCodes e = new ErrorCodes();
+         new ErrorCodes();
       }
       catch (MssException e) {
          assertNotNull(e.getError());
