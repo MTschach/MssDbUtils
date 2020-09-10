@@ -21,10 +21,10 @@ buildscript {
         jcenter()
         google()
     }
-	dependencies {
-		classpath 'com.android.tools.build:gradle:3.2.1'
-		classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
+   dependencies {
+      classpath 'com.android.tools.build:gradle:3.2.1'
+      classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+      classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
     }
 }
 
@@ -39,28 +39,42 @@ allprojects {
    }
 }
 
+//configurations {
+//   libCompile
+//   testCompile.extendsFrom libCompile
+//   compile.extendsFrom libCompile
+//}
+
+
+sourceSets {
+   main {
+      java {
+         srcDir 'src'
+      }
+   }
+   test {
+      java {
+//         compileClasspath += lib.output
+//         runtimeClasspath += lib.output
+         srcDir 'test'
+      }
+   }
+}
+
 
 dependencies {
-   compile 'Mss:MssUtils:latest.release'
-   compile 'org.apache.logging.log4j:log4j-core:latest.release'
-   compile 'org.apache.logging.log4j:log4j-api:latest.release'
+   compile        group: 'Mss'                           , name: 'MssUtils'               , version: 'latest.release'
+   compile        group: 'org.apache.logging.log4j'      , name: 'log4j-core'             , version: 'latest.release'
+   compile        group: 'org.apache.logging.log4j'      , name: 'log4j-api'              , version: 'latest.release'
 
 
    testCompile 'junit:junit:4.12'
-   testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: 'latest.release'
-   testCompile group: 'org.powermock', name: 'powermock-api-easymock', version: 'latest.release'
+   testCompile       group: 'org.powermock'                 , name: 'powermock-module-junit4', version: 'latest.release'
+   testCompile       group: 'org.powermock'                 , name: 'powermock-api-easymock' , version: 'latest.release'
+   testCompile       group: 'mysql'                         , name: 'mysql-connector-java'   , version: '8.0.11'
+   testCompile       group: 'org.xerial'                    , name: 'sqlite-jdbc'            , version: '3.7.2'
 }
 
-//create a single Jar with all dependencies
-task fatJar(type: Jar) {
-   manifest {
-        attributes 'Implementation-Title': 'MssDbUtils',  
-         'Implementation-Version': version
-    }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
 
 
 task publishLocal {
