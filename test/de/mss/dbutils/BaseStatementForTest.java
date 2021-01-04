@@ -16,7 +16,7 @@ public class BaseStatementForTest extends BaseStatement<BigInteger, Integer> {
 
 
    @Override
-   public BigInteger execute(String loggingId, Integer in, MssConnection con) {
+   public BigInteger doExecute(String loggingId, Integer in, MssConnection con) {
       return BigInteger.valueOf(in.intValue());
    }
 

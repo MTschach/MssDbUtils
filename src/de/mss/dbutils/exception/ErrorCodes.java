@@ -19,7 +19,7 @@ public class ErrorCodes implements Serializable {
    public static final Error ERROR_WAITING                    = new Error(ERROR_CODE_BASE + 7, "error while waiting for a while");
    public static final Error ERROR_INIT_DB_DRIVER             = new Error(ERROR_CODE_BASE + 8, "error while loading db driver class");
    public static final Error ERROR_GETTING_CONNECTION         = new Error(ERROR_CODE_BASE + 9, "error while openening db connection");
-
+   public static final Error ERROR_INVALID_STATEMENT_INPUT    = new Error(ERROR_CODE_BASE + 10, "invalid input for statement");
 
    private ErrorCodes() {}
 }

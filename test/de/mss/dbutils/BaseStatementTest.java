@@ -32,8 +32,8 @@ public class BaseStatementTest extends DbBaseTest {
 
 
    @Test
-   public void testExecute() {
-      String loggingId = "";
+   public void testExecute() throws MssException {
+      final String loggingId = "";
       assertEquals(BigInteger.valueOf(12), this.classUnderTest.execute(loggingId, Integer.valueOf(12), null));
    }
 
@@ -59,14 +59,14 @@ public class BaseStatementTest extends DbBaseTest {
       try {
          this.classUnderTest.getSetClause(null);
       }
-      catch (MssException e) {
+      catch (final MssException e) {
          assertNotNull(e.getError());
          assertEquals(5002, e.getError().getErrorCode());
       }
       try {
          this.classUnderTest.getSetClause(this.fields);
       }
-      catch (MssException e) {
+      catch (final MssException e) {
          assertNotNull(e.getError());
          assertEquals(5002, e.getError().getErrorCode());
       }
@@ -77,7 +77,7 @@ public class BaseStatementTest extends DbBaseTest {
       this.fields.add(new QueryParam("NAME", "egal", java.sql.Types.VARCHAR));
       assertEquals("ID_TEST_TABLE = 2, NAME = 'egal'", this.classUnderTest.getSetClause(this.fields));
 
-      java.util.Date stamp = new java.util.Date();
+      final java.util.Date stamp = new java.util.Date();
       this.fields.add(new QueryParam("DATE_INSERT", stamp, java.sql.Types.TIMESTAMP));
       assertEquals(
             "ID_TEST_TABLE = 2, NAME = 'egal', DATE_INSERT = '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(stamp) + "'",
@@ -86,18 +86,31 @@ public class BaseStatementTest extends DbBaseTest {
 
 
    @Test
+   public void testNullInput() {
+      try {
+         this.classUnderTest.execute("", null, null);
+         fail();
+      }
+      catch (final MssException e) {
+         assertNotNull(e.getError());
+         assertEquals(5010, e.getError().getErrorCode());
+      }
+   }
+
+
+   @Test
    public void testGetWhereClause() throws MssException {
       try {
          this.classUnderTest.getWhereClause(null);
       }
-      catch (MssException e) {
+      catch (final MssException e) {
          assertNotNull(e.getError());
          assertEquals(5002, e.getError().getErrorCode());
       }
       try {
          this.classUnderTest.getWhereClause(this.params);
       }
-      catch (MssException e) {
+      catch (final MssException e) {
          assertNotNull(e.getError());
          assertEquals(5002, e.getError().getErrorCode());
       }
@@ -108,7 +121,7 @@ public class BaseStatementTest extends DbBaseTest {
       this.params.add(new QueryParam("NAME", "egal", java.sql.Types.VARCHAR));
       assertEquals("where ID_TEST_TABLE = 2 and NAME = 'egal'", this.classUnderTest.getWhereClause(this.params));
 
-      java.util.Date stamp = new java.util.Date();
+      final java.util.Date stamp = new java.util.Date();
       this.params.add(new QueryParam("DATE_INSERT", stamp, java.sql.Types.TIMESTAMP));
       assertEquals(
             "where ID_TEST_TABLE = 2 and NAME = 'egal' and DATE_INSERT = '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(stamp) + "'",
@@ -118,7 +131,7 @@ public class BaseStatementTest extends DbBaseTest {
 
    @Test
    public void testGetSelectStatement() throws MssException {
-      java.util.Date stamp = new java.util.Date();
+      final java.util.Date stamp = new java.util.Date();
       setupFieldsAndParams(stamp);
 
       assertEquals(
@@ -131,7 +144,7 @@ public class BaseStatementTest extends DbBaseTest {
 
    @Test
    public void testGetUpdateStatement() throws MssException {
-      java.util.Date stamp = new java.util.Date();
+      final java.util.Date stamp = new java.util.Date();
       setupFieldsAndParams(stamp);
 
       assertEquals(
@@ -146,7 +159,7 @@ public class BaseStatementTest extends DbBaseTest {
 
    @Test
    public void testGetDeleteStatement() throws MssException {
-      java.util.Date stamp = new java.util.Date();
+      final java.util.Date stamp = new java.util.Date();
       setupFieldsAndParams(stamp);
 
       assertEquals(
@@ -157,28 +170,30 @@ public class BaseStatementTest extends DbBaseTest {
    }
 
 
+   @SuppressWarnings("resource")
    @Test
    public void testPrepareStatementNullCon() {
-      String loggingId = Tools.getId(new Throwable());
+      final String loggingId = Tools.getId(new Throwable());
       try {
          BaseStatement.prepareStatement(loggingId, null, getDefaultSql(), getDefaultValues(), getDefaultTypes());
       }
-      catch (MssException e) {
+      catch (final MssException e) {
          assertNotNull(e.getError());
          assertEquals(2, e.getError().getErrorCode());
       }
    }
 
 
+   @SuppressWarnings("resource")
    @Test
    public void testPrepareStatementWrongTypes() throws SQLException {
-      String loggingId = Tools.getId(new Throwable());
+      final String loggingId = Tools.getId(new Throwable());
       setUpPreparedStatement(false);
       EasyMock.replay(this.connectionMock);
       try {
          BaseStatement.prepareStatement(loggingId, this.mssConnectionMock, getDefaultSql(), getDefaultValues(), getWrongTypes());
       }
-      catch (MssException e) {
+      catch (final MssException e) {
          assertNotNull(e.getError());
          assertEquals(5004, e.getError().getErrorCode());
       }
@@ -186,15 +201,16 @@ public class BaseStatementTest extends DbBaseTest {
    }
 
 
+   @SuppressWarnings("resource")
    @Test
    public void testPrepareStatementWithSQLException() throws SQLException {
-      String loggingId = Tools.getId(new Throwable());
+      final String loggingId = Tools.getId(new Throwable());
       setUpPreparedStatement(true);
       EasyMock.replay(this.connectionMock);
       try {
          BaseStatement.prepareStatement(loggingId, this.mssConnectionMock, getDefaultSql(), getDefaultValues(), getWrongTypes());
       }
-      catch (MssException e) {
+      catch (final MssException e) {
          assertNotNull(e.getError());
          assertEquals(5006, e.getError().getErrorCode());
       }
@@ -202,9 +218,10 @@ public class BaseStatementTest extends DbBaseTest {
    }
 
 
+   @SuppressWarnings("resource")
    @Test
    public void testPrepareStatement() throws SQLException, MssException {
-      String loggingId = Tools.getId(new Throwable());
+      final String loggingId = Tools.getId(new Throwable());
       try (PreparedStatement pstmtMock = setUpPreparedStatement(false)) {
          EasyMock.replay(this.connectionMock, pstmtMock);
          BaseStatement.prepareStatement(loggingId, this.mssConnectionMock, getDefaultSql(), getDefaultValues(), getDefaultTypes());
@@ -214,28 +231,30 @@ public class BaseStatementTest extends DbBaseTest {
    }
 
 
+   @SuppressWarnings("resource")
    @Test
    public void testPrepareCallNullCon() {
-      String loggingId = Tools.getId(new Throwable());
+      final String loggingId = Tools.getId(new Throwable());
       try {
          BaseStatement.prepareCall(loggingId, null, getDefaultSql(), getDefaultValues(), getDefaultTypes());
       }
-      catch (MssException e) {
+      catch (final MssException e) {
          assertNotNull(e.getError());
          assertEquals(2, e.getError().getErrorCode());
       }
    }
 
 
+   @SuppressWarnings("resource")
    @Test
    public void testPrepareCallWrongTypes() throws SQLException {
-      String loggingId = Tools.getId(new Throwable());
+      final String loggingId = Tools.getId(new Throwable());
       setUpCallStatement(false);
       EasyMock.replay(this.connectionMock);
       try {
          BaseStatement.prepareCall(loggingId, this.mssConnectionMock, getDefaultSql(), getDefaultValues(), getWrongTypes());
       }
-      catch (MssException e) {
+      catch (final MssException e) {
          assertNotNull(e.getError());
          assertEquals(5004, e.getError().getErrorCode());
       }
@@ -243,15 +262,16 @@ public class BaseStatementTest extends DbBaseTest {
    }
 
 
+   @SuppressWarnings("resource")
    @Test
    public void testPrepareCallWithSQLException() throws SQLException {
-      String loggingId = Tools.getId(new Throwable());
+      final String loggingId = Tools.getId(new Throwable());
       setUpCallStatement(true);
       EasyMock.replay(this.connectionMock);
       try {
          BaseStatement.prepareCall(loggingId, this.mssConnectionMock, getDefaultSql(), getDefaultValues(), getWrongTypes());
       }
-      catch (MssException e) {
+      catch (final MssException e) {
          assertNotNull(e.getError());
          assertEquals(5006, e.getError().getErrorCode());
       }
@@ -259,9 +279,10 @@ public class BaseStatementTest extends DbBaseTest {
    }
 
 
+   @SuppressWarnings("resource")
    @Test
    public void testPrepareCall() throws SQLException, MssException {
-      String loggingId = Tools.getId(new Throwable());
+      final String loggingId = Tools.getId(new Throwable());
       try (PreparedStatement pstmtMock = setUpCallStatement(false)) {
          EasyMock.replay(this.connectionMock, pstmtMock);
          BaseStatement.prepareCall(loggingId, this.mssConnectionMock, getDefaultSql(), getDefaultValues(), getDefaultTypes());
@@ -280,7 +301,7 @@ public class BaseStatementTest extends DbBaseTest {
       this.params.add(new QueryParam("TABLE_NAME", "SYS_USER", java.sql.Types.VARCHAR));
       this.params.add(new QueryParam("DATE_INSERT", stamp, java.sql.Types.TIMESTAMP));
       this.params.add(new QueryParam("ID_TABLE_PK", Integer.valueOf(12), java.sql.Types.INTEGER));
-      QueryParam q = new QueryParam("FIELD_NAME", null, java.sql.Types.VARCHAR);
+      final QueryParam q = new QueryParam("FIELD_NAME", null, java.sql.Types.VARCHAR);
       q.setNullable(true);
       this.params.add(q);
    }
@@ -306,6 +327,7 @@ public class BaseStatementTest extends DbBaseTest {
    }
 
 
+   @SuppressWarnings("resource")
    private PreparedStatement setUpPreparedStatement(boolean withException) throws SQLException {
       if (withException) {
          EasyMock
@@ -319,15 +341,15 @@ public class BaseStatementTest extends DbBaseTest {
          return null;
       }
 
-      PreparedStatement pstmtMock = EasyMock.createMock(PreparedStatement.class);
-               EasyMock
-                     .expect(
-                           this.connectionMock
-                                 .prepareStatement(
-                                       EasyMock.eq(getDefaultSql()),
+      final PreparedStatement pstmtMock = EasyMock.createMock(PreparedStatement.class);
+      EasyMock
+            .expect(
+                  this.connectionMock
+                        .prepareStatement(
+                              EasyMock.eq(getDefaultSql()),
                               EasyMock.eq(1004),
                               EasyMock.eq(1007)))
-                     .andReturn(pstmtMock);
+            .andReturn(pstmtMock);
 
       setUpStatementCalls(pstmtMock);
 
@@ -335,6 +357,7 @@ public class BaseStatementTest extends DbBaseTest {
    }
 
 
+   @SuppressWarnings("resource")
    private CallableStatement setUpCallStatement(boolean withException) throws SQLException {
       if (withException) {
          EasyMock
@@ -348,7 +371,7 @@ public class BaseStatementTest extends DbBaseTest {
          return null;
       }
 
-      CallableStatement pstmtMock = EasyMock.createMock(CallableStatement.class);
+      final CallableStatement pstmtMock = EasyMock.createMock(CallableStatement.class);
       EasyMock
             .expect(
                   this.connectionMock
@@ -364,6 +387,7 @@ public class BaseStatementTest extends DbBaseTest {
    }
 
 
+   @SuppressWarnings("resource")
    private void setUpStatementCalls(PreparedStatement stmt) throws SQLException {
       stmt.setInt(EasyMock.eq(1), EasyMock.eq(1));
       EasyMock.expectLastCall();

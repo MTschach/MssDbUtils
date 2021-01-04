@@ -14,7 +14,29 @@ public abstract class BaseStatement<R, I> implements Serializable {
    protected String          tableName        = null;
 
 
-   public abstract R execute(String loggingId, I in, MssConnection con) throws MssException;
+   protected void checkInput(String loggingId, I in, MssConnection con) throws MssException {
+      if (in == null) {
+         throw new MssException(de.mss.dbutils.exception.ErrorCodes.ERROR_INVALID_STATEMENT_INPUT, "the input for a statement must not be null");
+      }
+   }
+
+
+   protected abstract R doExecute(String loggingId, I in, MssConnection con) throws MssException;
+
+
+   public R execute(String loggingId, I in, MssConnection con) throws MssException {
+      checkInput(loggingId, in, con);
+
+      final R ret = doExecute(loggingId, in, con);
+
+      return workOnOutput(loggingId, ret);
+   }
+
+
+   @SuppressWarnings("unused")
+   protected R workOnOutput(String loggingId, R output) throws MssException {
+      return output;
+   }
 
 
    protected String getSelectStatement(List<QueryParam> fields, List<QueryParam> params) throws MssException {
@@ -34,20 +56,22 @@ public abstract class BaseStatement<R, I> implements Serializable {
 
    @SuppressWarnings("static-method")
    protected String getWhereClause(List<QueryParam> params) throws MssException {
-      StringBuilder sb = new StringBuilder();
+      final StringBuilder sb = new StringBuilder();
 
       if (params != null && !params.isEmpty()) {
          sb.append("where ");
          boolean first = true;
-         for (QueryParam q : params) {
-            if (!first)
+         for (final QueryParam q : params) {
+            if (!first) {
                sb.append(" and ");
+            }
 
             sb.append(q.getFieldName());
-            if (q.isNullValue())
+            if (q.isNullValue()) {
                sb.append(" is ");
-            else
+            } else {
                sb.append(" = ");
+            }
 
             sb.append(q.getTypedFieldValue());
 
@@ -61,16 +85,18 @@ public abstract class BaseStatement<R, I> implements Serializable {
 
    @SuppressWarnings("static-method")
    protected String getSetClause(List<QueryParam> values) throws MssException {
-      StringBuilder sb = new StringBuilder();
+      final StringBuilder sb = new StringBuilder();
 
-      if (values == null || values.isEmpty())
+      if (values == null || values.isEmpty()) {
          throw new MssException(de.mss.dbutils.exception.ErrorCodes.ERROR_SET_LIST_IS_EMPTY, "Set clause must not be empty");
+      }
 
       boolean first = true;
 
-      for (QueryParam v : values) {
-         if (!first)
+      for (final QueryParam v : values) {
+         if (!first) {
             sb.append(", ");
+         }
 
          sb.append(v.getFieldName());
          sb.append(" = ");
@@ -84,16 +110,18 @@ public abstract class BaseStatement<R, I> implements Serializable {
 
    @SuppressWarnings("static-method")
    protected String getSelectClause(List<QueryParam> fields) {
-      StringBuilder sb = new StringBuilder();
+      final StringBuilder sb = new StringBuilder();
 
-      if (fields == null || fields.isEmpty())
+      if (fields == null || fields.isEmpty()) {
          return "*";
+      }
 
       boolean first = true;
 
-      for (QueryParam f : fields) {
-         if (!first)
+      for (final QueryParam f : fields) {
+         if (!first) {
             sb.append(", ");
+         }
 
          sb.append(f.getFieldName());
          first = false;
@@ -109,12 +137,19 @@ public abstract class BaseStatement<R, I> implements Serializable {
    }
 
 
-   protected static
-         MssPreparedStatement
-         prepareStatement(String loggingId, MssConnection con, String sql, int resultSetType, int resultSetConcurrency, Object[] values, int[] types)
-               throws MssException {
-      if (con == null)
+   @SuppressWarnings("resource")
+   protected static MssPreparedStatement prepareStatement(
+         String loggingId,
+         MssConnection con,
+         String sql,
+         int resultSetType,
+         int resultSetConcurrency,
+         Object[] values,
+         int[] types)
+         throws MssException {
+      if (con == null) {
          throw new MssException(de.mss.utils.exception.ErrorCodes.ERROR_INVALID_PARAM, "no connection given");
+      }
 
       MssPreparedStatement pstmt = null;
       try {
@@ -122,7 +157,7 @@ public abstract class BaseStatement<R, I> implements Serializable {
          pstmt.setSqlParams(values, types);
          return pstmt;
       }
-      catch (SQLException e) {
+      catch (final SQLException e) {
          throw new MssException(de.mss.dbutils.exception.ErrorCodes.ERROR_PREPARING_STATEMENT, e, "could not prepare statement");
       }
    }
@@ -134,6 +169,7 @@ public abstract class BaseStatement<R, I> implements Serializable {
    }
 
 
+   @SuppressWarnings("resource")
    protected static MssCallableStatement prepareCall(
          String loggingId,
          MssConnection con,
@@ -143,8 +179,9 @@ public abstract class BaseStatement<R, I> implements Serializable {
          Object[] values,
          int[] types)
          throws MssException {
-      if (con == null)
+      if (con == null) {
          throw new MssException(de.mss.utils.exception.ErrorCodes.ERROR_INVALID_PARAM, "no connection given");
+      }
 
       MssCallableStatement pstmt = null;
       try {
@@ -152,7 +189,7 @@ public abstract class BaseStatement<R, I> implements Serializable {
          pstmt.setSqlParams(values, types);
          return pstmt;
       }
-      catch (SQLException e) {
+      catch (final SQLException e) {
          throw new MssException(de.mss.dbutils.exception.ErrorCodes.ERROR_PREPARING_STATEMENT, e, "could not prepare statement");
       }
    }
