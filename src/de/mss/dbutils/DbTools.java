@@ -8,9 +8,6 @@ import java.util.Date;
 
 public class DbTools {
 
-   private DbTools() {}
-
-
    public static BigDecimal getBigDecimal(ResultSet res, int i) throws SQLException {
       return getBigDecimal(res, i, null);
    }
@@ -399,4 +396,7 @@ public class DbTools {
 
       return ret;
    }
+
+
+   private DbTools() {}
 }
