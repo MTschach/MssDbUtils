@@ -24,7 +24,7 @@ buildscript {
    dependencies {
       classpath 'com.android.tools.build:gradle:3.2.1'
       classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-      classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
+      classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:latest.release'
     }
 }
 
@@ -33,18 +33,11 @@ allprojects {
    repositories {
       jcenter()
       maven {
-         url "https://dl.bintray.com/mtschach/Mss"
+         url 'https://mtschach.jfrog.io/artifactory/mss-repo'
       }
       mavenLocal()
    }
 }
-
-//configurations {
-//   libCompile
-//   testCompile.extendsFrom libCompile
-//   compile.extendsFrom libCompile
-//}
-
 
 sourceSets {
    main {
@@ -54,8 +47,6 @@ sourceSets {
    }
    test {
       java {
-//         compileClasspath += lib.output
-//         runtimeClasspath += lib.output
          srcDir 'test'
       }
    }
@@ -82,4 +73,4 @@ task publishLocal {
 }
 
 
-apply from: 'deploy.gradle'
+apply from: 'https://raw.githubusercontent.com/MTschach/MssUtils/master/deploy.gradle'
